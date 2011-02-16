@@ -1,0 +1,32 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.8	//
+_POSTFIX_H	postfix.h	8;"	d
+_STACK_H	stack.h	7;"	d
+applyOperator	postfix.c	/^int applyOperator(int num1, int num2, char *opr){$/;"	f
+element	stack.h	/^  stkElement element;$/;"	m	struct:stkNode
+evaluatePostfix	postfix.c	/^int evaluatePostfix(char *postfixStr){$/;"	f
+infixToPostfix	postfix.c	/^char *infixToPostfix(char *infixStr){$/;"	f
+inputPrecedence	postfix.c	/^int inputPrecedence(char *str){$/;"	f
+isLeftParen	postfix.c	/^bool isLeftParen(char *str){$/;"	f
+isOperand	postfix.c	/^bool isOperand(char *str){$/;"	f
+isOperator	postfix.c	/^bool isOperator(char *str){$/;"	f
+isRightParen	postfix.c	/^bool isRightParen(char *str){$/;"	f
+main	test.c	/^int main()$/;"	f
+next	stack.h	/^  struct stkNode *next;$/;"	m	struct:stkNode	typeref:struct:stkNode::stkNode
+stack	stack.h	/^} stack;$/;"	t	typeref:struct:__anon1
+stackDestroy	stack.c	/^void stackDestroy(stack *stkPtr)$/;"	f
+stackInit	stack.c	/^void stackInit(stack *stkPtr)$/;"	f
+stackIsEmpty	stack.c	/^bool stackIsEmpty(stack *stkPtr)$/;"	f
+stackLength	stack.c	/^int stackLength(stack *stkPtr)$/;"	f
+stackPeek	stack.c	/^stkElement stackPeek(stack *stkPtr)$/;"	f
+stackPop	stack.c	/^stkElement stackPop(stack *stkPtr)$/;"	f
+stackPrecedence	postfix.c	/^int stackPrecedence(char *str){$/;"	f
+stackPush	stack.c	/^void stackPush(stack *stkPtr, stkElement element)$/;"	f
+stkElement	stack.h	/^typedef char * stkElement;$/;"	t
+stkNode	stack.h	/^struct stkNode {$/;"	s
+stkNode	stack.h	/^typedef struct stkNode stkNode;$/;"	t	typeref:struct:stkNode
+top	stack.h	/^  stkNode *top;$/;"	m	struct:__anon1
