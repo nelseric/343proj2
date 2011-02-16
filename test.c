@@ -5,8 +5,16 @@
 int main()
 {
     char test[] = " ( 10 + 2 ) * 3 + 2 * ( 6 / 3 + 2 ^ 2 ) ";
+    puts(test);
+    puts(infixToPostfix(test));
+    
+    char postTest[] = "4 3 4 + *";
+    int i = evaluatePostfix(postTest);
+    printf("%d", i);
+
     char *token = strtok(test, " ");
     int a, b, c, d, ip, sp;
+
     puts("token\t(\t)\topate\topand\tip\tsp");
     while(token != NULL) {
         a = isLeftParen(token);

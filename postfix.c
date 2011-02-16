@@ -8,9 +8,24 @@ char *infixToPostfix(char *infixStr){
     strcpy(inCopy,infixStr);
 
     char *postfixString = malloc(sizeof(char)*strlen(infixStr)*2);
+    postfixString[0] = '\0';
+
     char *token = strtok(inCopy," ");
-    
-    while(token != NULL){   
+
+    stack convoStack;
+    stackInit(&convoStack);
+
+    while(token != NULL){
+        if(isOperand(token)){
+            strcat(postfixString,token);
+            strcat(postfixString," ");
+        } else if(isLeftParen(token)){
+            stackPush(&convoStack, token);
+        } else if(isOperator(token)){
+            char *peek = stackPeek(&convoStack);
+        } else if(isRightParen(token)){
+
+        }
         token = strtok(NULL," ");
     }
     return postfixString;
@@ -67,8 +82,49 @@ int inputPrecedence(char *str){
     return 0;
 }
 int evaluatePostfix(char *postfixStr){
-    return 0;
+    char postfixCopy[strlen(postfixStr)];
+    strcpy(postfixCopy,postfixStr);
+    char *token = strtok(postfixCopy," ");
+    int x, y;
+    stack op;
+    stackInit(&op);
+    while (token != NULL){
+        if(isOperand(token)){
+            stackPush(&op, token);
+        } else if(isOperator(token)) {
+            y = atoi(stackPop(&op));
+            x = atoi(stackPop(&op));
+            applyOperator(x,y,token);
+        }
+        token = strtok(NULL," ");
+
+        return 0;
+    }
 }
 int applyOperator(int num1, int num2, char *opr){
-    return 0;
+    int result;
+    switch(opr[0]){
+        case '+':
+            result = num1 + num2;
+            break;
+        case '*':
+            result = num1 * num2;
+            break;
+        case '-':
+            result = num1 - num2;
+            break;
+        case '/':
+            result = num1 / num2;
+            break;
+        case '%':
+            result = num1 % num2;
+            break;
+        case '^':
+            result = num1 ^ num2;
+            break;
+        default:
+            result = 0;
+    }
+    return result;
 }
+
