@@ -2,8 +2,18 @@
 #include "stack.h"
 #include <ctype.h>
 #include <string.h>
+#include <stdlib.h>
 char *infixToPostfix(char *infixStr){
-    return infixStr;
+    char inCopy[strlen(infixStr)];
+    strcpy(inCopy,infixStr);
+
+    char *postfixString = malloc(sizeof(char)*strlen(infixStr)*2);
+    char *token = strtok(inCopy," ");
+    
+    while(token != NULL){   
+        token = strtok(NULL," ");
+    }
+    return postfixString;
 }
 
 bool isOperator(char *str){
