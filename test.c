@@ -8,9 +8,9 @@ int main()
     puts(test);
     puts(infixToPostfix(test));
     
-    char postTest[] = "4 3 4 + *";
+    char postTest[] = "4 4 + 3 *";
     int i = evaluatePostfix(postTest);
-    printf("%d", i);
+    printf("%d\n", i);
 
     char *token = strtok(test, " ");
     int a, b, c, d, ip, sp;

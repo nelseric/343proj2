@@ -3,6 +3,7 @@
 #include <ctype.h>
 #include <string.h>
 #include <stdlib.h>
+#include <stdio.h>
 char *infixToPostfix(char *infixStr){
     char inCopy[strlen(infixStr)];
     strcpy(inCopy,infixStr);
@@ -94,12 +95,13 @@ int evaluatePostfix(char *postfixStr){
         } else if(isOperator(token)) {
             y = atoi(stackPop(&op));
             x = atoi(stackPop(&op));
-            applyOperator(x,y,token);
+            char a[10];
+            sprintf(a,"%d",applyOperator(x,y,token));
+            stackPush(&op,a);
         }
         token = strtok(NULL," ");
-
-        return 0;
     }
+    return atoi(stackPop(&op));
 }
 int applyOperator(int num1, int num2, char *opr){
     int result;
