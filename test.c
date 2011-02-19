@@ -4,7 +4,7 @@
 
 int main()
 {
-    char test[] = " ( 10 + 2 ) * 3 + ( 3 * 4 )";
+    char test[] = " ( 10 + 2 ) * 3 + 2 * ( 6 / 3 + 2 ^ 2 ) ";
     puts(test);
     char *postTest = infixToPostfix(test);
     puts(postTest);

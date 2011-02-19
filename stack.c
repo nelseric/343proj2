@@ -6,6 +6,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
+#include <string.h>
 #include "stack.h"
 
 /* function to initialize a new stack variable */
@@ -43,8 +44,12 @@ void stackPush(stack *stkPtr, stkElement element)
 	}
 
 	/* put information in node */
-	newNode->element = element;
 
+
+	newNode->element = malloc(sizeof(char) * strlen(element));
+        strcpy(newNode->element,element);
+
+        
 	/* link new top node to old top node */
 	newNode->next = stkPtr->top;
 
