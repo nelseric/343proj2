@@ -4,14 +4,13 @@
 
 int main()
 {
-    char test[] = " ( 10 + 2 ) * 3 + 2 * ( 6 / 3 + 2 ^ 2 ) ";
+    char test[] = " ( 10 + 2 ) * 3 + ( 3 * 4 )";
     puts(test);
-    puts(infixToPostfix(test));
-    
-    char postTest[] = "4 4 + 3 *";
+    char *postTest = infixToPostfix(test);
+    puts(postTest);
     int i = evaluatePostfix(postTest);
     printf("%d\n", i);
-
+/*
     char *token = strtok(test, " ");
     int a, b, c, d, ip, sp;
 
@@ -25,6 +24,6 @@ int main()
         sp = stackPrecedence(token);
         printf("%s\t%d\t%d\t%d\t%d\t%d\t%d\n",token, a, b, c, d, ip, sp);
         token = strtok(NULL," ");
-    } 
+    } */
     return 0;
 }

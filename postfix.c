@@ -4,11 +4,13 @@
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <math.h>
+
 char *infixToPostfix(char *infixStr){
     char inCopy[strlen(infixStr)];
     strcpy(inCopy,infixStr);
 
-    char *postfixString = malloc(sizeof(char)*strlen(infixStr)*2);
+    char *postfixString = malloc(sizeof(char)*strlen(infixStr));
     postfixString[0] = '\0';
 
     char *token = strtok(inCopy," ");
@@ -23,22 +25,29 @@ char *infixToPostfix(char *infixStr){
         } else if(isLeftParen(token)){
             stackPush(&convoStack, token);
         } else if(isOperator(token)){
-            char *peek = stackPeek(&convoStack);
-            while(isOperator(peek)){
-                int sp = stackPrecedence(peek);
-                int ip = inputPrecedence(token);
-                if(sp >= ip){
-                    strcat(postfixString,stackPop(&convoStack));
-                    stackPush(&convoStack,token);
+            if(!stackIsEmpty(&convoStack)){
+                char *peek = stackPeek(&convoStack);
+                while(isOperator(peek)){
+                    int sp = stackPrecedence(peek);
+                    int ip = inputPrecedence(token);
+                    if(sp >= ip){
+                        strcat(postfixString,stackPop(&convoStack));
+                        strcat(postfixString," ");
+                    } else
+                        break;
+                    if(!stackIsEmpty(&convoStack)){
+                        peek = stackPeek(&convoStack);
+                    } else {
+                        peek = "\0";
+                    }
                 }
-                peek = stackPeek(&convoStack);
             }
             stackPush(&convoStack,token);
         } else if(isRightParen(token)){
             char *peek = stackPeek(&convoStack);
             while(isOperator(peek)){
-                strcat(postfixString,stackPop(&convoStack));
-                stackPush(&convoStack,token);
+                strcat(postfixString,stackPop(&convoStack));                
+                strcat(postfixString," ");
                 peek = stackPeek(&convoStack);
             }
             if(isLeftParen(stackPeek(&convoStack))){
@@ -46,6 +55,13 @@ char *infixToPostfix(char *infixStr){
             }
         }
         token = strtok(NULL," ");
+    }
+    while(!stackIsEmpty(&convoStack)){
+        char *tok = stackPop(&convoStack);
+        if(isOperator(tok)){
+            strcat(postfixString,tok);                
+            strcat(postfixString," ");
+        }
     }
     return postfixString;
 }
@@ -140,11 +156,21 @@ int applyOperator(int num1, int num2, char *opr){
             result = num1 % num2;
             break;
         case '^':
-            result = num1 ^ num2;
+            result = ipow(num1, num2);
             break;
         default:
             result = 0;
     }
     return result;
 }
+
+int ipow(int a, int b){
+    int res = 1;
+    int i;
+    for(i = 0; i < b; ++i){
+        res *= a;
+    }
+    return res;
+}
+
 

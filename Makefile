@@ -1,5 +1,5 @@
 all:
-	gcc *.c -o infix
+	gcc *.c -ggdb -o infix
 debug:
 	gcc *.c -ggdb -o infix
 clean:
