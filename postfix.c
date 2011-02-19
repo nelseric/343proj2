@@ -24,8 +24,26 @@ char *infixToPostfix(char *infixStr){
             stackPush(&convoStack, token);
         } else if(isOperator(token)){
             char *peek = stackPeek(&convoStack);
+            while(isOperator(peek)){
+                int sp = stackPrecedence(peek);
+                int ip = inputPrecedence(token);
+                if(sp >= ip){
+                    strcat(postfixString,stackPop(&convoStack));
+                    stackPush(&convoStack,token);
+                }
+                peek = stackPeek(&convoStack);
+            }
+            stackPush(&convoStack,token);
         } else if(isRightParen(token)){
-
+            char *peek = stackPeek(&convoStack);
+            while(isOperator(peek)){
+                strcat(postfixString,stackPop(&convoStack));
+                stackPush(&convoStack,token);
+                peek = stackPeek(&convoStack);
+            }
+            if(isLeftParen(stackPeek(&convoStack))){
+                stackPop(&convoStack);
+            }
         }
         token = strtok(NULL," ");
     }
