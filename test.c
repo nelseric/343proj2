@@ -1,16 +1,13 @@
 /*
- * test.c
+ * posftix.c
  *
  *  Created on: Feb 19, 2011
- *      Author: Matthew LEvandowski
+ *      Author: Matthew Levandowski
  *	 	Email: levandma@mail.gvsu.edu
- *      GVSU Computer Science
+ *      GVSU CS 343
  */
 
-#if defined(_WIN32) || defined(WIN32) || defined(__CYGWIN__) || defined(__MINGW32__) || defined(__BORLANDC__)
-#define OS_WIN
-#endif
-
+#define MAXBUFFERSIZE 80
 #include <stdio.h>
 #include <stdlib.h>
 #include "postfix.h"
@@ -22,74 +19,131 @@ int stackSize;
 int Menu();
 void runInfixToPostfix();
 void runEvaluatePostfix();
+void flushBuffer();
 
-int end = 0;
+void flushBuffer() {
+	char ch;
+	while ((ch = getchar()) != '\n' && ch != EOF);
+}
 
 int Menu() {
-	int i;
-	printf("\n");
-	printf("MENU\n\n");
-	printf("1 - Convert Infix to Postfix\n");
-	printf("2 - Evaluate Postfix Expression\n");
-	printf("3 - Exit\n\n");
-	printf("Choose: ");
-	scanf("%d", &i);
-	printf("\n\n");
-	return i;
-}
+	int exit_flag = 0, valid_choice;
+	char menu_choice;
 
-void runInfixToPostfix() {
-	char tempStr[80];
-	fflush(stdout);
-	printf("enter infix expr:\n");
-	//fgets(tempStr, 80, stdin);
-	scanf("%80s", tempStr);
-	printf("Postfix output: %s", tempStr);
-	end = 1;
-}
-
-void runEvaluatePostfix() {
-	char *tempStr;
-	int i;
-	printf("enter postfix expr:\n");
-	//set max string size to 82
-	tempStr = malloc(82 * sizeof(char));
-	scanf("%s", tempStr);
-	for (i = 0; i < strlen(tempStr); i++) {
-		printf("%s ", tempStr[i]);
-	}
-	printf("\n");
-	end = 1;
-}
-
-void clearScreen() {
-#ifdef OS_WIN
-	system("CLS");
-#else
-	system("clear");
-#endif
-
-}
-
-int main() {
-	while (end != 1) {
-		int op;
-		//clearScreen();
-		op = Menu();
-		switch (op) {
-		case 1:
+	while (exit_flag == 0) {
+		valid_choice = 0;
+		while (valid_choice == 0) {
+			printf(
+					"\n1 = Convert Infix to Postfix\n2 = Evaluate Postfix Expression\n3 = Exit\n");
+			printf("Enter choice:\n");
+			scanf("   %c", &menu_choice);
+			if ((menu_choice == '1') || (menu_choice == '2') || (menu_choice
+					== '3'))
+				valid_choice = 1;
+			else
+				printf("\007Error. Invalid menu choice selected.\n");
+		}
+		switch (menu_choice) {
+		case '1':
+			flushBuffer();
 			runInfixToPostfix();
 			break;
-		case 2:
+		case '2':
+			flushBuffer();
 			runEvaluatePostfix();
 			break;
-		case 3:// This is the option to quit the program
-			end = 1;
+		case '3':
+			exit_flag = 1;
 			break;
 		default:
-			printf("ERROR: invalid selection.\n\n");
+			printf("Error--- Should not occur.\n");
 			break;
 		}
 	}
+}
+
+void runInfixToPostfix() {
+	char ch; /* handles user input */
+	char buffer[MAXBUFFERSIZE]; /* sufficient to handle one line */
+	int char_count; /* number of characters read for this line */
+	int exit_flag = 0;
+	int valid_choice;
+	char *result;
+
+	while (exit_flag == 0) {
+		printf("Enter an infix expression (<80 chars)\n");
+		ch = getchar();
+		char_count = 0;
+		while ((ch != '\n') && (char_count < MAXBUFFERSIZE)) {
+			buffer[char_count++] = ch;
+			ch = getchar();
+		}
+		buffer[char_count] = 0x00; /* null terminate buffer */
+		printf("\nThe line you entered was:\n");
+		printf("%s\n", buffer);
+
+		valid_choice = 0;
+		while (valid_choice == 0) {
+			printf("Is this Correct (Y/N)?\n");
+			scanf(" %c", &ch);
+			ch = toupper(ch);
+			if ((ch == 'Y') || (ch == 'N')) {
+				result = infixToPostfix(buffer);
+				valid_choice = 1;
+				printf("Postfix expression is: %s\n", result);
+				exit_flag = 1;
+			} else {
+				printf("\007Error: Invalid choice\n");
+			}
+			flushBuffer();
+		}
+		if (ch == 'N')
+			exit_flag = 1;
+	}
+}
+
+void runEvaluatePostfix() {
+	char ch; /* handles user input */
+	char buffer[MAXBUFFERSIZE]; /* sufficient to handle one line */
+	int char_count; /* number of characters read for this line */
+	int exit_flag = 0;
+	int valid_choice;
+	int evalResult;
+
+	while (exit_flag == 0) {
+		printf("Enter a Postfix expression (<80 chars)\n");
+		ch = getchar();
+		char_count = 0;
+		while ((ch != '\n') && (char_count < MAXBUFFERSIZE)) {
+			buffer[char_count++] = ch;
+			ch = getchar();
+		}
+		buffer[char_count] = 0x00; /* null terminate buffer */
+		printf("\nThe line you entered was:\n");
+		printf("%s\n", buffer);
+
+		valid_choice = 0;
+		while (valid_choice == 0) {
+			printf("Is this Correct (Y/N)?\n");
+			scanf(" %c", &ch);
+			ch = toupper(ch);
+			if ((ch == 'Y') || (ch == 'N')) {
+				evalResult = evaluatePostfix(buffer);
+				valid_choice = 1;
+				printf("Postfix evaluation is: %d\n", evalResult);
+				exit_flag = 1;
+			} else {
+				printf("\007Error: Invalid choice\n");
+			}
+			flushBuffer();
+		}
+		if (ch == 'N')
+			exit_flag = 1;
+	}
+}
+
+// main function
+int main() {
+	Menu();
 	return 0;
 }
