@@ -1,6 +1,6 @@
 all:
-	gcc *.c -ggdb -o infix
+	gcc *.c -Wall -ggdb -lreadline -o infix
 debug:
-	gcc *.c -ggdb -o infix
+	gcc *.c -Wall -ggdb -lreadline -o infix
 clean:
 	rm infix

@@ -36,4 +36,7 @@ int evaluatePostfix(char *postfixStr);
 /* function that performs num1 opr num2 and returns the result */
 int applyOperator(int num1, int num2, char *opr);
 
+/* integer power function */
+int ipow(int a, int b);
+
 #endif  /* _POSTFIX_H */

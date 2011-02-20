@@ -2,8 +2,8 @@
  * test.c
  *
  *  Created on: Feb 19, 2011
- *      Author: Matthew LEvandowski
- *	 	Email: levandma@mail.gvsu.edu
+ *      Authors: Matthew LEvandowski Email: levandma@mail.gvsu.edu
+ *	 	 Eric Nelson
  *      GVSU Computer Science
  */
 
@@ -15,6 +15,9 @@
 #include <stdlib.h>
 #include "postfix.h"
 #include "stack.h"
+#include <string.h>
+#include <readline/readline.h>
+
 
 stack pile;
 int stackSize;
@@ -34,32 +37,24 @@ int Menu() {
 	printf("3 - Exit\n\n");
 	printf("Choose: ");
 	scanf("%d", &i);
+	if(ferror(stdin) == 0){
+		clearerr(stdin);
+		while(getchar() != '\n');
+	}
 	printf("\n\n");
 	return i;
 }
 
 void runInfixToPostfix() {
-	char tempStr[80];
-	fflush(stdout);
-	printf("enter infix expr:\n");
-	//fgets(tempStr, 80, stdin);
-	scanf("%80s", tempStr);
-	printf("Postfix output: %s", tempStr);
-	end = 1;
+	char *line = readline("Enter Infix Expression: ");
+	char *postfix = infixToPostfix(line);
+	printf("\tPostfix: %s\n", postfix);
+	printf("\tValue: %d\n", evaluatePostfix(postfix));
 }
 
 void runEvaluatePostfix() {
-	char *tempStr;
-	int i;
-	printf("enter postfix expr:\n");
-	//set max string size to 82
-	tempStr = malloc(82 * sizeof(char));
-	scanf("%s", tempStr);
-	for (i = 0; i < strlen(tempStr); i++) {
-		printf("%s ", tempStr[i]);
-	}
-	printf("\n");
-	end = 1;
+	char *line = readline("Enter Postfix Expression: ");
+	printf("\tValue: %d\n", evaluatePostfix(line));
 }
 
 void clearScreen() {
@@ -77,18 +72,18 @@ int main() {
 		//clearScreen();
 		op = Menu();
 		switch (op) {
-		case 1:
-			runInfixToPostfix();
-			break;
-		case 2:
-			runEvaluatePostfix();
-			break;
-		case 3:// This is the option to quit the program
-			end = 1;
-			break;
-		default:
-			printf("ERROR: invalid selection.\n\n");
-			break;
+			case 1:
+				runInfixToPostfix();
+				break;
+			case 2:
+				runEvaluatePostfix();
+				break;
+			case 3:// This is the option to quit the program
+				end = 1;
+				break;
+			default:
+				printf("ERROR: invalid selection.\n\n");
+				break;
 		}
 	}
 	return 0;
